@@ -1,10 +1,5 @@
 #!/bin/bash
 
-# include bpkg  dependencies
-source /usr/local/bin/retry
-source /usr/local/bin/bgo
-source /usr/local/bin/bgowait
-
 function kick_livy_server(){
 
     export SPARK_HOME=/opt/spark-2.2.0-bin-hadoop2.7/
@@ -18,7 +13,7 @@ function kick_livy_server(){
 
 function start(){
 
-    bgo kick_livy_server
+    kick_livy_server
     if [[ $? != 0 ]]; then
         echo "start failed. exiting now." >&2
         exit 1
@@ -31,7 +26,7 @@ function exit_alert() {
         echo "$1 failed, exiting" 
         exit 1
     else    
-        echo "$2 Success."
+        echo "$1 Success."
     fi
 }
 
@@ -46,15 +41,3 @@ fi
 # start
 start 
 exit_alert "start" $?  
-
-# configure
-retry 5 5 "configure failed." configure
-exit_alert "retry" $?  
-
-
-# wait
-echo "done. now waiting for services."
-freq=5; waitForN=1; killTasks=1 #fail one, fail all (production mode)
-bgowait $freq $waitForN $killTasks
-
-

@@ -15,7 +15,6 @@
     # - LIVY_SERVER_JAVA_OPTS  Java Opts for running livy server 
     # - (You can set jvm related setting here, like jvm memory/gc algorithm and etc.)
     export LIVY_SERVER_JAVA_OPTS="-Xmx2g"
-    export JAVA_HOME=/usr/jdk64/jdk1.8.0_112
 
 
     ## - Print All the Parameters set up for the Livy - ##
@@ -26,3 +25,5 @@
     echo "Livy PID Dir: ${LIVY_PID_DIR}"
     echo "Livy Server Java Opts: ${LIVY_SERVER_JAVA_OPTS}"
     echo "Java Home: ${JAVA_HOME}"
+    echo "Java version:" 
+    java -version
