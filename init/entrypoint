@@ -1,0 +1,58 @@
+#!/bin/bash
+
+# include bpkg  dependencies
+source /usr/local/bin/retry
+source /usr/local/bin/bgo
+source /usr/local/bin/bgowait
+
+
+function livy_server_service(){
+
+    export SPARK_HOME=/opt/spark-2.2.0-bin-hadoop2.7/
+
+    echo "starting Livy Server!"
+    /opt/apache-livy-0.6.0-incubating-bin/bin/livy-server start 
+
+    # whatever blocking call 
+    tail -f /dev/null
+}
+
+function start(){
+
+    bgo livy_server_service
+    if [[ $? != 0 ]]; then
+        echo "start failed. exiting now." >&2
+        exit 1
+    fi
+}
+
+
+
+
+    # start
+    start 
+    if [[ $? != 0 ]]; then
+        echo "start failed. exiting now." >&2
+        exit 1
+    fi    
+
+    # configure
+    retry 5 5 "configure failed." configure
+    if [[ $? != 0 ]]; then
+        echo "cannot run configure." >&2
+        exit 1
+    fi
+
+    # wait
+    echo "done. now waiting for services."
+    #freq=5; waitForN=-1; killTasks=0 # fail one, ignore (development mode)
+    freq=5; waitForN=1; killTasks=1 #fail one, fail all (production mode)
+    bgowait $freq $waitForN $killTasks
+
+
+
+if [[ "$1" == "" ]]; then
+    main
+else
+    exec "$@"
+fi
