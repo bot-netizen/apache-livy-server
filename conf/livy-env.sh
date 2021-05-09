@@ -24,6 +24,5 @@
     echo "Livy Log Dir: ${LIVY_LOG_DIR}"
     echo "Livy PID Dir: ${LIVY_PID_DIR}"
     echo "Livy Server Java Opts: ${LIVY_SERVER_JAVA_OPTS}"
-    echo "Java Home: ${JAVA_HOME}"
-    echo "Java version:" 
+    echo "--- Java Details ---" 
     java -version
