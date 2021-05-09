@@ -5,8 +5,7 @@ source /usr/local/bin/retry
 source /usr/local/bin/bgo
 source /usr/local/bin/bgowait
 
-
-function livy_server_service(){
+function kick_livy_server(){
 
     export SPARK_HOME=/opt/spark-2.2.0-bin-hadoop2.7/
 
@@ -19,40 +18,43 @@ function livy_server_service(){
 
 function start(){
 
-    bgo livy_server_service
+    bgo kick_livy_server
     if [[ $? != 0 ]]; then
         echo "start failed. exiting now." >&2
         exit 1
     fi
 }
 
-
-
-
-    # start
-    start 
-    if [[ $? != 0 ]]; then
-        echo "start failed. exiting now." >&2
+function exit_alert() {
+    if [[ $1 -ne 0 ]]; then 
+        shift
+        echo "$1 failed, exiting" 
         exit 1
-    fi    
-
-    # configure
-    retry 5 5 "configure failed." configure
-    if [[ $? != 0 ]]; then
-        echo "cannot run configure." >&2
-        exit 1
+    else    
+        echo "$2 Success."
     fi
-
-    # wait
-    echo "done. now waiting for services."
-    #freq=5; waitForN=-1; killTasks=0 # fail one, ignore (development mode)
-    freq=5; waitForN=1; killTasks=1 #fail one, fail all (production mode)
-    bgowait $freq $waitForN $killTasks
+}
 
 
-
+##-- Main Execution Starts Here --##
 if [[ "$1" == "" ]]; then
-    main
+    echo "Calling the start... "
 else
     exec "$@"
 fi
+
+# start
+start 
+exit_alert "start" $?  
+
+# configure
+retry 5 5 "configure failed." configure
+exit_alert "retry" $?  
+
+
+# wait
+echo "done. now waiting for services."
+freq=5; waitForN=1; killTasks=1 #fail one, fail all (production mode)
+bgowait $freq $waitForN $killTasks
+
+
