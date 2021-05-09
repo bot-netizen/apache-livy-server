@@ -4,7 +4,7 @@
     export SPARK_CONF_DIR=/usr/hadoop/spark2/conf
 
     # - HADOOP_CONF_DIR Directory containing the Hadoop / YARN configuration to use.
-    export HADOOP_CONF_DIR=/usr/hadoop/conf
+    export HADOOP_CONF_DIR=/opt/hadoop-config/hadoop/conf
 
     # - LIVY_LOG_DIR    Where log files are stored.  (Default: ${LIVY_HOME}/logs)
     export LIVY_LOG_DIR=/var/log/livy2
