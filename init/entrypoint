@@ -1,0 +1,43 @@
+#!/bin/bash
+
+function kick_livy_server(){
+
+    export SPARK_HOME=/opt/spark-2.2.0-bin-hadoop2.7/
+
+    echo "starting Livy Server!"
+    /opt/apache-livy-0.6.0-incubating-bin/bin/livy-server start 
+
+    # whatever blocking call 
+    tail -f /dev/null
+}
+
+function start(){
+
+    kick_livy_server
+    if [[ $? != 0 ]]; then
+        echo "start failed. exiting now." >&2
+        exit 1
+    fi
+}
+
+function exit_alert() {
+    if [[ $1 -ne 0 ]]; then 
+        shift
+        echo "$1 failed, exiting" 
+        exit 1
+    else    
+        echo "$1 Success."
+    fi
+}
+
+
+##-- Main Execution Starts Here --##
+if [[ "$1" == "" ]]; then
+    echo "Calling the start... "
+else
+    exec "$@"
+fi
+
+# start
+start 
+exit_alert "start" $?  
