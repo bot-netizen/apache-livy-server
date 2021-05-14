@@ -12,7 +12,7 @@ Version is build for running the livy server for a Hadoop Spark cluster, Require
 
 ### Versions:
 
-* Livy-Server: 0.6.0
+* Livy-Server: 0.7.0
 * Apache Spark: 2.2.1
 * Hadoop Version: 2.7.0
 * Python: Python3 
@@ -26,7 +26,7 @@ Version is build for running the livy server for a Hadoop Spark cluster, Require
 ```bash
 git clone
 cd spark-livy
-docker build --no-cache -t tdotlabs/spark-livy:0.1.0 .
+docker build --no-cache -t botnetizen/spark-livy:0.1.0 .
 ```
 
 * How to set config
@@ -40,5 +40,5 @@ docker build --no-cache -t tdotlabs/spark-livy:0.1.0 .
 * How to run
 
 ```bash
-docker run -d -p 8998:8998 -v /tmp:/opt/hadoop-config tdotlabs/apache-livy-server:0.1.0 
+docker run -d -p 8998:8998 -v /tmp:/opt/hadoop-config botnetizen/apache-livy-server:0.1.0 
 ```
